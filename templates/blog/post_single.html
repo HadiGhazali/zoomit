@@ -1,0 +1,48 @@
+{% extends 'base/base.html' %}
+{% block title %}
+    zoomit || {{ post.title }}
+{% endblock %}
+{% block body %}
+    {% include 'base/header.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>{{ post.title }}</h1>
+            </div>
+            <div class="col-12">
+                <img alt="post image" width="100%" src="{{ post.image.url }}">
+            </div>
+        </div>
+        <br>
+        {% if setting.author %}
+            <p>{{ post.author }}</p>
+        {% endif %}
+        <p>{{ post.content }}</p>
+        {% if setting.allow_discussion %}
+            <div>
+                {% for comment in comments %}
+                    <div>
+                        {{ comment.author.username }}
+
+                    </div>
+                    <div>
+                        {{ comment.content }}
+
+                    </div>
+                {% endfor %}
+
+            </div>
+            {% if setting.comment %}
+                <form>
+                    <input type="text" name="content">
+                </form>
+            {% endif %}
+        {% endif %}
+
+        <a href="{% url 'posts_archive' %}">posts</a>
+        <br>
+        <a href="{% url 'category_single' category.slug %}">{{ category.title }}</a>
+    </div>
+{% include  'base/footer.html' %}
+
+{% endblock %}

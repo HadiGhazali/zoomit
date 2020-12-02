@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+{% block title %}
+category archive
+
+{% endblock %}
+{% block body %}
+<div class="container">
+<ul>
+{% for category in categories %}
+<li>
+    <a href="{% url 'category_single' category.slug %}">{{ category.title }}</a>
+</li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

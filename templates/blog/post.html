@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+    Home
+{% endblock %}
+{% block body %}
+    {% include 'base/header.html' %}
+    <div class="container">
+        <ul class="dir-rtl">
+            {% for post in  posts %}
+                <li><a href="{% url 'post_single' post.slug %}">{{ post.title }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <ul>
+            {% for category in  categories %}
+                <li><a href="{% url 'category_single' category.slug %}">{{ category.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% include 'base/footer.html' %}
+{% endblock %}
