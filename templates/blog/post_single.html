@@ -13,15 +13,35 @@
             <div class="col-12">
                 <h1>{{ post.title }}</h1>
             </div>
+
             <div class="col-12">
-                <img alt="post image" width="100%" src="{{ post.image.url }}">
+                <div class="card m-auto" style="width: 40rem;">
+                    <img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap">
+                </div>
+                {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
             </div>
+            {% if post.image3 %}
+                <div class="col-12">
+                    <div class="card m-auto" style="width: 40rem;">
+                        <img class="card-img-top" src="{{ post.image3.url }}" alt="Card image cap">
+                    </div>
+                    {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
+                </div>
+            {% endif %}
         </div>
         <br>
         {% if setting.author %}
             <p>{{ post.author }}</p>
         {% endif %}
         <p>{{ post.content }}</p>
+        {% if post.image2 %}
+            <div class="col-12">
+                <div class="card m-auto" style="width: 40rem;">
+                    <img class="card-img-top" src="{{ post.image2.url }}" alt="Card image cap">
+                </div>
+                {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
+            </div>
+        {% endif %}
         {% if setting.allow_discussion %}
             <div>
                 {% for comment in comments %}
@@ -42,11 +62,15 @@
                 </form>
             {% endif %}
         {% endif %}
-
-        <a href="{% url 'posts_archive' %}">posts</a>
-        <br>
-        <a href="{% url 'category_single' category.slug %}">{{ category.title }}</a>
+        <hr>
+        <div class="row">
+            <div class="col-12">مطالب مرتبط:</div>
+            {% for related_post in related_posts %}
+                <div class="col-12">
+                    <a href="{% url 'post_single' related_post.slug %}">{{ related_post.title }}</a>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-{% include  'base/footer.html' %}
-
+    <div class="mt-2">{% include  'base/footer.html' %}</div>
 {% endblock %}

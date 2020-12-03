@@ -28,12 +28,14 @@ class Post(models.Model):
     publish_time = models.DateTimeField(_("Publish at"), db_index=True)
     draft = models.BooleanField(_("Draft"), default=True, db_index=True)
     image = models.ImageField(_("image"), upload_to='post/images', null=True)
+    image2 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
+    image3 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
     author = models.ForeignKey(User, verbose_name=_("Author"), related_name='posts',
                                related_query_name='children', on_delete=models.CASCADE)
     category = models.ForeignKey(Category, verbose_name=_('Category'), on_delete=models.SET_NULL,
                                  related_name='posts',
                                  null=True, blank=True)
-
+    summary = models.CharField(_("Summary"), max_length=200, null=True)
     class Meta:
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")

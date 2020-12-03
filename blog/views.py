@@ -1,5 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
+from django.db.models import Q
 from django.urls import reverse
 from django.template import loader
 
@@ -29,7 +30,8 @@ def single(request, pk):
         'category': post.category,
         'setting': post.post_setting,
         'author': post.author,
-        'comments': post.comments.filter(is_confirmed=True)
+        'comments': post.comments.filter(is_confirmed=True),
+        'related_posts': post.category.posts.filter(~Q(slug=pk))
     }
     return render(request, 'blog/post_single.html', context)
 
@@ -40,11 +42,12 @@ def category_single(request, pk):
     except Category.DoesNotExist:
         raise Http404('Category not found')
     posts = Post.objects.filter(category=category)
-    links = ''.join(
-        '<li><a href={}>{}</a></li>'.format(reverse('post_single', args=[post.slug]), post.title) for post in posts)
-    blog = '<html><head><title>post archive</title></head>{}<a href={}>all categories</a></body></html>'.format(
-        '<ul>{}</ul>'.format(links), reverse('categories_archive'))
-    return HttpResponse(blog)
+
+    context = {
+        'posts': posts,
+        'category': category,
+    }
+    return render(request, 'blog/category_single.html', context)
 
 
 def categories_archive(request):
@@ -52,9 +55,4 @@ def categories_archive(request):
     context = {
         'categories': categories,
     }
-    links = ''.join(
-        '<li><a href={}>{}</a></li>'.format(reverse('category_single', args=[category.slug]), category.title) for
-        category in categories)
-    blog = '<html><head><title>post archive</title></head>{}</body></html>'.format(
-        '<ul>{}</ul>'.format(links))
     return render(request, 'blog/category_archive.html', context)

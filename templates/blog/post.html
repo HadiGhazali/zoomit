@@ -6,21 +6,32 @@
 {% endblock %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/home-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/myColor.css' %}">
 {% endblock %}
 {% block body %}
     {% include 'base/header.html' %}
     <div class="container dir-rtl">
-        <ul class="dir-rtl">
-            {% for post in  posts %}
-                <li><a href="{% url 'post_single' post.slug %}">{{ post.title }}</a></li>
-            {% endfor %}
-        </ul>
 
-        <ul>
-            {% for category in  categories %}
-                <li><a href="{% url 'category_single' category.slug %}">{{ category.title }}</a></li>
-            {% endfor %}
-        </ul>
+        {% for post in posts %}
+            <div class="row border m-1">
+                <div class="col-4">
+                    <div class="p-2 m-2">
+                        <img alt="post image" width="100%" src="{{ post.image.url }}">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <span class="text-light-color">{{ post.create_at }}</span>
+                    {% if post.post_setting.author %}
+                        <span class="text-light-color"> || {{ post.author }}</span>
+                    {% endif %}
+                    <div class="p-2 m-2">
+                        <a href="{% url 'post_single' post.slug %}">{{ post.title }}</a><br>
+                        <p>{{ post.summary }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
     </div>
     {% include 'base/footer.html' %}
 {% endblock %}
