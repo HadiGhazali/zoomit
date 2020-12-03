@@ -1,10 +1,14 @@
 {% extends 'base/base.html' %}
+{% load static %}
 {% block title %}
     zoomit || {{ post.title }}
 {% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/home-style.css' %}">
+{% endblock %}
 {% block body %}
     {% include 'base/header.html' %}
-    <div class="container">
+    <div class="container dir-rtl border">
         <div class="row">
             <div class="col-12">
                 <h1>{{ post.title }}</h1>
