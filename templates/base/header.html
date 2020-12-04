@@ -12,22 +12,26 @@
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
             <ul class="navbar-nav mr-auto col-lg-4 m-0 p-0 justify-content-end text-right">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout'%}">logout
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login'%}">login
-                    </a>
-                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">logout
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">login
+                        </a>
+                    </li>
+                {% endif %}
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'posts_archive' %}">موبایل</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'posts_archive'%}">خودرو
+                    <a class="nav-link" href="{% url 'posts_archive' %}">خودرو
                     </a>
                 </li>
-
 
 
                 <li class="nav-item dropdown">

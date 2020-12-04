@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.template import loader
 from django.contrib.auth import authenticate, login, logout
 from .models import Post, Category
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, CommentForm
 
 
 def home(request):
@@ -27,14 +27,26 @@ def single(request, pk):
         post = Post.objects.select_related('post_setting', 'category', 'author').get(slug=pk)
     except Post.DoesNotExist:
         raise Http404('post not found')
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+        else:
+            pass
+    else:
+        form = CommentForm()
     context = {
+        'form': form,
         'post': post,
         'category': post.category,
         'setting': post.post_setting,
         'author': post.author,
         'comments': post.comments.filter(is_confirmed=True),
-        'related_posts': post.category.posts.filter(~Q(slug=pk))
-    }
+        'related_posts': post.category.posts.filter(~Q(slug=pk))}
     return render(request, 'blog/post_single.html', context)
 
 
@@ -83,13 +95,21 @@ def logout_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        forms = UserRegistrationForm(request.POST)
-        if forms.is_valid():
-            print('valid')
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = User.objects.create(username=username, first_name=first_name, last_name=last_name, email=email)
+            user.set_password(password)
+            user.save()
+            return render(request, 'blog/login.html')
         else:
-            print('invalid')
-        context = {'forms': forms}
+            pass
+        context = {'form': form}
     else:
-        forms = UserRegistrationForm()
-        context = {'forms': forms}
+        form = UserRegistrationForm()
+        context = {'form': form}
     return render(request, 'blog/register.html', context)

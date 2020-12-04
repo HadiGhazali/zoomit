@@ -1,0 +1,24 @@
+<form action="{% url 'register' %}" method="post">
+    <div class="form-group">
+        {% csrf_token %}
+
+        {% for feild in form %}
+            <div>
+                {{ feild.label_tag }}
+                {{ feild }}
+                {% for error in  feild.errors %}
+                    <div class="alert alert-danger mt-2" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <hr>
+        {% for form_erorr in form.non_field_errors %}
+            <div class="alert alert-danger mt-2">{{ form_erorr }}</div>
+        {% endfor %}
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </div>
+</form>
