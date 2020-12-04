@@ -1,0 +1,29 @@
+{% extends 'base/base.html' %}
+
+{% block body %}
+    <div class="h-100 w-100"><div style="height: 10%">{% include 'base/header.html' %}</div>
+        <div class="container d-flex justify-content-center align-items-center  " style="height: 80%">
+            <div class="border p-3">
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="text" class="form-control" name="username" id="exampleInputEmail1"
+                               aria-describedby="emailHelp"
+                               placeholder="User name">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                            else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                               placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+    </div>
+    <div style="height: 10%">{% include 'base/footer.html' %}</div>
+</div>
+{% endblock %}

@@ -35,7 +35,8 @@ class Post(models.Model):
     category = models.ForeignKey(Category, verbose_name=_('Category'), on_delete=models.SET_NULL,
                                  related_name='posts',
                                  null=True, blank=True)
-    summary = models.CharField(_("Summary"), max_length=200, null=True)
+    summary = models.CharField(_("Summary"), max_length=200, null=True, blank=True)
+
     class Meta:
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")
