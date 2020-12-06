@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.template import loader
 from django.contrib.auth import authenticate, login, logout
 from .models import Post, Category
-from .forms import UserRegistrationForm, CommentForm
+from .forms import UserRegistrationForm, CommentForm, LoginForm
 
 
 def home(request):
@@ -73,18 +73,21 @@ def categories_archive(request):
 
 
 def login_view(request):
-    context = {}
+    form = LoginForm()
     if request.user.is_authenticated:
         return redirect('posts_archive')
     if request.method == 'POST':
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
+        form = LoginForm(request.POST)
+        form.is_valid()
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
         user = authenticate(request, username=username, password=password)
         if user and user.is_active:
             login(request, user)
             return redirect('posts_archive')
         else:
             pass
+    context = {'forms': form}
     return render(request, 'blog/login.html', context)
 
 
@@ -105,7 +108,7 @@ def register_view(request):
             user = User.objects.create(username=username, first_name=first_name, last_name=last_name, email=email)
             user.set_password(password)
             user.save()
-            return render(request, 'blog/login.html')
+            return redirect('login')
         else:
             pass
         context = {'form': form}
