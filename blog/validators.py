@@ -1,6 +1,8 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+
+User = get_user_model()
 
 
 def validate_password(password):
@@ -18,3 +20,10 @@ def validate_username(username):
     except User.DoesNotExist:
         return username
 
+
+def validate_user_and_name(username, password):
+    if authenticate(username=username, password=password) is None:
+        raise ValidationError(
+            _('user name or password not exist'),
+            code='invalid'
+        )

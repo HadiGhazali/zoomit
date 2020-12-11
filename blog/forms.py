@@ -1,9 +1,11 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from blog.models import Comment
-from blog.validators import validate_password, validate_username
+from blog.validators import validate_password, validate_username, validate_user_and_name
+
+User = get_user_model()
 
 
 class UserRegistrationForm1(forms.Form):
@@ -56,6 +58,10 @@ class LoginForm(forms.Form):
     password = forms.CharField(label=_('Password'), widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                required=True)
 
+    def clean(self):
+        username = self.cleaned_data['username']
+        password = self.cleaned_data['password']
+        validate_user_and_name(username, password)
 
 
 class UserRegistrationForm(forms.ModelForm):

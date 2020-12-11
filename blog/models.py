@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Category(models.Model):
@@ -30,7 +30,7 @@ class Post(models.Model):
     image = models.ImageField(_("image"), upload_to='post/images', null=True)
     image2 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
     image3 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
-    author = models.ForeignKey(User, verbose_name=_("Author"), related_name='posts',
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"), related_name='posts',
                                related_query_name='children', on_delete=models.CASCADE)
     category = models.ForeignKey(Category, verbose_name=_('Category'), on_delete=models.SET_NULL,
                                  related_name='posts',
@@ -64,7 +64,7 @@ class Comment(models.Model):
                              related_query_name='comments')
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
-    author = models.ForeignKey(User, verbose_name=_("Author"), on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"), on_delete=models.CASCADE)
     is_confirmed = models.BooleanField(_("Confirm"), default=True)
 
     class Meta:
@@ -87,7 +87,7 @@ class Comment(models.Model):
 
 
 class CommentLike(models.Model):
-    author = models.ForeignKey(User, verbose_name=_("Author"), on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"), on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, verbose_name=_('Comment'), on_delete=models.CASCADE,
                                 related_name='comment_like')
     condition = models.BooleanField(_("Condition"))
