@@ -14,7 +14,7 @@
             <ul class="navbar-nav mr-auto col-lg-4 m-0 p-0 justify-content-end text-right">
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">{{ request.user.username }}
+                        <a class="nav-link" href="{% url 'logout' %}">{{ request.user.email }}
                         </a>
                     </li>
                 {% else %}
@@ -54,3 +54,11 @@
         </div>
     </div>
 </nav>
+
+{#<div>#}
+{#                {% if request.user.avatar %}#}
+{#                    <img alt="post image" height="50px" src="{{ request.user.avatar.url }}">#}
+{#                {% else %}#}
+{##}
+{#                {% endif %}#}
+{#            </div>#}

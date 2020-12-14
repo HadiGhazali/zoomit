@@ -1,8 +1,9 @@
 {% extends 'base/base.html' %}
 
 {% block body %}
-    <div class="h-100 w-100"><div style="height: 10%">{% include 'base/header.html' %}</div>
-        <div class="container d-flex justify-content-center align-items-center  " style="height: 80%">
+    <div class="h-100 w-100">
+        <div>{% include 'base/header.html' %}</div>
+        <div class="container d-flex justify-content-center align-items-center  " style="height: 90%">
             <div class="border p-3">
                 <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
@@ -12,6 +13,6 @@
             </div>
 
     </div>
-    <div style="height: 10%">{% include 'base/footer.html' %}</div>
+    <div>{% include 'base/footer.html' %}</div>
 </div>
 {% endblock %}

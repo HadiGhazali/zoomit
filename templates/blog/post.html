@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/myColor.css' %}">
 {% endblock %}
 {% block body %}
-    {% include 'base/header.html' %}
+    <div>{% include 'base/header.html' %}</div>
     <div class="container dir-rtl">
 
         {% for post in posts %}
@@ -33,6 +33,6 @@
         {% endfor %}
 
     </div>
-    <div style="height: 5%">{% include 'base/footer.html' %}</div>
+    <div>{% include 'base/footer.html' %}</div>
 
 {% endblock %}

@@ -1,8 +1,6 @@
 <form action="{% url 'register' %}" method="post">
     {% csrf_token %}
     <div class="form-group">
-
-
         {% for feild in form %}
             <div>
                 {{ feild.label_tag }}
