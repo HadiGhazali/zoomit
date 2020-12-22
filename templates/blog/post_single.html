@@ -42,6 +42,17 @@
                 {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
             </div>
         {% endif %}
+        <div>Comments</div>
+        <div>
+            {% for comment in post.comments.all %}
+                {{ comment.author }}
+
+                <br>
+                {{ comment }}
+
+            {% endfor %}
+
+        </div>
         {% if setting.allow_discussion %}
             <div>
                 {% for comment in comments %}
@@ -56,6 +67,7 @@
                 {% endfor %}
 
             </div>
+
             {% if setting.comment %}
                 <form method="post" action="{% url 'post_single' post.slug %}">
                     {% csrf_token %}

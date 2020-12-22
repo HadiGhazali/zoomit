@@ -5,9 +5,9 @@
         <div>{% include 'base/header.html' %}</div>
         <div class="container d-flex justify-content-center align-items-center  " style="height: 90%">
             <div class="border p-3">
-                <form action="{% url 'Login-2' %}" method="post">
+                <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
-                    {{ forms }}
+                    {{ form }}
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
             </div>

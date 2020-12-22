@@ -12,7 +12,7 @@
     <div>{% include 'base/header.html' %}</div>
     <div class="container dir-rtl">
 
-        {% for post in posts %}
+        {% for post in post_list %}
             <div class="row border m-1">
                 <div class="col-4">
                     <div class="p-2 m-2">
@@ -22,10 +22,10 @@
                 <div class="col-8">
                     <span class="text-light-color">{{ post.create_at }}</span>
                     {% if post.post_setting.author %}
-                        <span class="text-light-color"> || {{ post.author }}</span>
+                        <span class="text-light-color"> || {{ post.author.first_name }}</span>
                     {% endif %}
                     <div class="p-2 m-2">
-                        <a href="{% url 'post_single' post.slug %}">{{ post.title }}</a><br>
+                        <a href="{% url 'post_single_2' post.slug %}">{{ post.title }}</a><br>
                         <p>{{ post.summary }}</p>
                     </div>
                 </div>

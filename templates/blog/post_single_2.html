@@ -1,0 +1,12 @@
+{% extends 'base/base.html' %}
+{% block title %}
+    post archive
+{% endblock %}
+
+{% block body %}
+{% include 'base/header.html' %}
+    {{ post.title }}
+    {{ post.content }}
+    {{ post.comments.all }}
+{% include 'base/footer.html' %}
+{% endblock %}

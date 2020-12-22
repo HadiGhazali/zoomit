@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
@@ -8,16 +9,16 @@ from account.validators import validate_user_and_name, validate_username, valida
 User = get_user_model()
 
 
-class LoginForm(forms.Form):
-    email = forms.CharField(label=_('Email'), max_length=150, required=True,
-                            widget=forms.TextInput(attrs={'class': 'form-control'}))
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label=_('Email'), max_length=150, required=True,
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(label=_('Password'), widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                required=True)
 
-    def clean(self):
-        email = self.cleaned_data['email']
-        password = self.cleaned_data['password']
-        validate_user_and_name(email, password)
+    # def clean(self):
+    #     email = self.cleaned_data['email']
+    #     password = self.cleaned_data['password']
+    #     validate_user_and_name(email, password)
 
 
 class UserRegistrationForm(forms.ModelForm):
@@ -26,14 +27,12 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'password2', 'first_name', 'last_name', 'phone_number')
+        fields = ('email', 'password', 'password2', 'phone_number')
         widgets = {
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),
             'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def clean(self):

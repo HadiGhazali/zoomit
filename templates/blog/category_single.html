@@ -5,9 +5,14 @@ category single
 {% block body %}
 <div class="container dir-rtl">
 <ul>
-    {% for post in posts %}
-    <li><a href="{% url 'post_single' category.slug%}">{{ post.title }}</a></li>
+    {% for post in category.posts.all %}
+    <li><a href="{% url 'post_single_2' post.slug%}">{{ post.title }}</a></li>
     {% endfor %}
+</ul>
+<ul>
+    <li>
+        <a href="{% url 'categories_archive' %}">All categories</a>
+    </li>
 </ul>
 </div>
 {% endblock %}
