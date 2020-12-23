@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 # from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from blog.models import Comment
+
 # from blog.validators import validate_password, validate_username, validate_user_and_name
 
 User = get_user_model()
@@ -48,5 +49,9 @@ class CommentForm(forms.ModelForm):
         fields = ('content',)
         labels = {'content': _('Comment'), }
         help_texts = {
-            'content': _('inter your comment.'),
+            'content': _('Enter your comment.'),
         }
+
+
+class CommentLikeForm(forms.Form):
+    condition = forms.BooleanField(label=_('Condition'))

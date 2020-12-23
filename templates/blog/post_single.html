@@ -42,22 +42,19 @@
                 {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
             </div>
         {% endif %}
-        <div>Comments</div>
-        <div>
-            {% for comment in post.comments.all %}
-                {{ comment.author }}
-
-                <br>
-                {{ comment }}
-
-            {% endfor %}
-
-        </div>
-        {% if setting.allow_discussion %}
+        {% if post.post_setting.allow_discussion %}
             <div>
-                {% for comment in comments %}
+                {% for comment in post.comments.all %}
                     <div>
-                        {{ comment.author.username }}
+                        <form method="post" action="{% url 'post_single_2' post.slug %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <button type="submit" name="condition-true" value="true" class="btn btn-primary">like
+                            </button>
+                            <button type="submit" name="condition-false" value="false" class="btn btn-primary">dislike
+                            </button>
+                        </form>
+                        {{ comment.author.email }}
 
                     </div>
                     <div>
@@ -67,12 +64,12 @@
                 {% endfor %}
 
             </div>
-
-            {% if setting.comment %}
-                <form method="post" action="{% url 'post_single' post.slug %}">
+            {% if post.post_setting.comment %}
+                <form method="post" action="{% url 'post_single_2' post.slug %}">
                     {% csrf_token %}
+                    <input type="hidden" name="postSlug" value="{{ post.slug }}">
                     {{ form }}
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" name="createComment" value="true"  class="btn btn-primary">Submit</button>
                 </form>
             {% endif %}
         {% endif %}
