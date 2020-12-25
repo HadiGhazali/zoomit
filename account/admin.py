@@ -11,7 +11,7 @@ from account.models import User
 class UserAdmin(BaseUserAdmin):
     change_password_form = AdminPasswordChangeForm
     fieldsets = (
-        (None, {'fields': ('phone_number', 'password')}),
+        (None, {'fields': ('phone_number', 'password', 'avatar')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
@@ -25,7 +25,7 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
-    list_display = ('phone_number', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('email', 'phone_number', 'first_name', 'last_name', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('phone_number', 'first_name', 'last_name', 'email')
     ordering = ('email',)

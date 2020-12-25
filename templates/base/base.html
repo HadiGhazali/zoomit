@@ -1,18 +1,19 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
-    <link rel="stylesheet" href="{% static 'css/myColor.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/FullScreen.css' %}">
-    <link rel="stylesheet" href="{% static 'css/margins.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/myColor.css'%}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/FullScreen.css'%}">
+    <link rel="stylesheet" href="{% static 'css/margins.css'%}">
+    <link rel="stylesheet" href="{% static 'css/home-style.css'%}">
+
     {% block css %}{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}
-
     {% endblock %}</title>
 </head>
 <body>
@@ -20,6 +21,7 @@
 <script src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
 {% block javascript %}{% endblock %}
 </body>
 </html>

@@ -43,17 +43,10 @@
             </div>
         {% endif %}
         {% if post.post_setting.allow_discussion %}
-            <div>
+            <div id="AllPostComment">
                 {% for comment in post.comments.all %}
                     <div>
-                        <form method="post" action="{% url 'post_single_2' post.slug %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
-                            <button type="submit" name="condition-true" value="true" class="btn btn-primary">like
-                            </button>
-                            <button type="submit" name="condition-false" value="false" class="btn btn-primary">dislike
-                            </button>
-                        </form>
+
                         {{ comment.author.email }}
 
                     </div>
@@ -61,16 +54,26 @@
                         {{ comment.content }}
 
                     </div>
+                    <div>
+                        dislike:<span id="dislike_count_container{{ comment.id }}">{{ comment.dislike_count }}</span>
+                        <br>
+                        like:<span id="like_count_container{{ comment.id }}">{{ comment.like_count }}</span>
+                    </div>
+                    <div>
+                        <button type="submit" onclick="likeComment({{ comment.id }},true)"
+                                class="btn btn-primary">like
+                        </button>
+                        <button type="submit" onclick="likeComment({{ comment.id }}, false)"
+                                class="btn btn-primary">dislike
+                        </button>
+                    </div>
                 {% endfor %}
 
             </div>
             {% if post.post_setting.comment %}
-                <form method="post" action="{% url 'post_single_2' post.slug %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="postSlug" value="{{ post.slug }}">
-                    {{ form }}
-                    <button type="submit" name="createComment" value="true"  class="btn btn-primary">Submit</button>
-                </form>
+                <label for="commentText"></label>
+                <textarea name="content" id="commentText"></textarea>
+                <button onclick="creatComment({{ post.id }})">Send Comment</button>
             {% endif %}
         {% endif %}
         <hr>
@@ -84,4 +87,62 @@
         </div>
     </div>
     <div class="mt-2">{% include  'base/footer.html' %}</div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        function likeComment(CommentId, condition) {
+            let data = {
+                comment_id: CommentId,
+                condition
+            }
+            data = JSON.stringify(data)
+            $.ajax({
+                type: 'POST',
+                url:{% url 'like_comment' %},
+                data: data,
+                success: function (response) {
+                    let res = JSON.parse(response)
+                    $(`#dislike_count_container${res.comment_id}`).text(res.dislike_count)
+                    $(`#like_count_container${res.comment_id}`).text(res.like_count)
+                }
+            })
+        }
+
+        function creatComment(postId) {
+            let content = $('#commentText').val()
+            const data = JSON.stringify({
+                post_id: postId,
+                content: content,
+            })
+            $.ajax({
+                type: 'POST',
+                url: {% url 'create_comment'  %},
+                data: data,
+                success: function (response) {
+                    let res = JSON.parse(response)
+                    $('#AllPostComment').prepend(
+                        `<div>
+                            ${res.author}
+                         </div>
+                            <div>
+                            ${res.content}
+                    </div>
+                    <div>
+                        dislike:<span id="dislike_count_container${res.comment_id}">0</span>
+                        <br>
+                        like:<span id="like_count_container${res.comment_id}">0</span>
+                    </div>
+                    <div>
+                        <button type="submit" onclick="likeComment(${res.comment_id},true)"
+                                class="btn btn-primary">like
+                        </button>
+                        <button type="submit" onclick="likeComment(${res.comment_id}, false)"
+                                class="btn btn-primary">dislike
+                        </button>
+                    </div>`
+                    )
+                }
+            })
+        }
+    </script>
 {% endblock %}

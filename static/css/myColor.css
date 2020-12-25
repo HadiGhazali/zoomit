@@ -1,7 +1,18 @@
-.dark-color{
+.dark-color {
     background-color: #3d4140;
 }
 
-.text-light-color{
+.red-color{
+    background-color: red;
+}
+
+.myAlgin {
+
+    -webkit-box-align: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important
+}
+
+.text-light-color {
     color: #9b97a2 !important
 }

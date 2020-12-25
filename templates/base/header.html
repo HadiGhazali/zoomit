@@ -1,64 +1,51 @@
-<nav class="navbar navbar-expand-lg navbar-light dark-color">
-    <div class="d-flex d-lg-none w-100  m-0 p-0 justify-content-end">
-        <button class="navbar-toggler m-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+<nav style="direction: rtl !important;" class="navbar navbar-expand-lg navbar-light red-color ">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="row w-100">
-            <form class="form-inline my-2 my-lg-0 col-lg-8 m-0 p-0 justify-content-lg-start justify-content-end">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            <ul class="navbar-nav mr-auto col-lg-4 m-0 p-0 justify-content-end text-right">
+        <ul class="my-align-center navbar-nav ml-auto pr-2 mr-3 text-right myAlgin">
+            <li class="nav-item active ">
+                <a class="nav-link " href="#">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Dropdown
+                </a>
+                <div class="dropdown-menu text-right margin-rl-6 margin-1" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+            <li class="nav-item">
                 {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">{{ request.user.email }}
-                        </a>
-                    </li>
+                    <a class="nav-link" href="{% url 'logout' %}">
+                        {% if request.user.avatar %}
+                            <div class="align-self-center">
+                                <img src="{{ request.user.avatar.url }}" style="height: 30px;width: 30px" class="rounded-circle" alt="...">
+                            </div>
+                        {% else %}
+                            <i class="fas fa-user-check"></i>
+                        {% endif %}
+                    </a>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">login
-                        </a>
-                    </li>
+                    <a class="nav-link" href="{% url 'login' %}">
+                        <i class="fas fa-user"></i>
+                    </a>
                 {% endif %}
+            </li>
 
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'posts_archive' %}">موبایل</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'posts_archive' %}">خودرو
-                    </a>
-                </li>
-
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <div class="dropdown-menu text-right margin-1 margin-rl-6" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'posts_archive' %}">خانه</a>
-                </li>
-            </ul>
-        </div>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control ml-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
     </div>
 </nav>
-
-{#<div>#}
-{#                {% if request.user.avatar %}#}
-{#                    <img alt="post image" height="50px" src="{{ request.user.avatar.url }}">#}
-{#                {% else %}#}
-{##}
-{#                {% endif %}#}
-{#            </div>#}

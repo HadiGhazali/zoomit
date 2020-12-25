@@ -5,10 +5,12 @@ from django.db.models import Q
 from django.urls import reverse
 from django.template import loader
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, FormView
 from datetime import datetime
 from django.db import models
 from django.views.generic.edit import ModelFormMixin, FormMixin, BaseFormView
+import json
 
 from .models import Post, Category, Comment, CommentLike
 from .forms import CommentForm
@@ -48,32 +50,6 @@ class PostSingle(DetailView):
     model = Post
     template_name = 'blog/post_single.html'
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data['form'] = CommentForm
-        return data
-
-    def post(self, request, *args, **kwargs):
-        if request.POST.get('createComment', None) == 'true':
-            new_comment = Comment(content=request.POST.get('content'),
-                                  author=self.request.user,
-                                  post=self.get_object())
-            new_comment.save()
-
-        if request.POST.get('condition-true', None) == 'true':
-            comment_like = CommentLike()
-            comment_like.condition = True
-            comment_like.comment = Comment.objects.get(id=request.POST.get('comment_id'))
-            comment_like.author = self.request.user
-            comment_like.save()
-        elif request.POST.get('condition-false', None) == 'false':
-            comment_like = CommentLike()
-            comment_like.condition = False
-            comment_like.comment = Comment.objects.get(id=self.request.POST.get('comment_id'))
-            comment_like.author = self.request.user
-            comment_like.save()
-        return self.get(self, request, *args, **kwargs)
-
 
 class CategorySingle(DetailView):
     model = Category
@@ -81,11 +57,43 @@ class CategorySingle(DetailView):
 
 
 class CategoryArchive(ListView):
-    # print('_______________________________________')
     model = Category
     queryset = Category.objects.all()
     template_name = 'blog/category_archive.html'
 
+
+@csrf_exempt
+def like_comment(request):
+    data = json.loads(request.body)
+    user = request.user
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('bad request', status=404)
+    try:
+        comment_like = CommentLike.objects.get(author=user, comment=comment)
+        comment_like.condition = data['condition']
+        comment_like.save()
+    except CommentLike.DoesNotExist:
+        CommentLike.objects.create(author=user,
+                                   comment=comment,
+                                   condition=data['condition'])
+    response = {'dislike_count': comment.dislike_count, 'like_count': comment.like_count, 'comment_id': comment.id}
+    return HttpResponse(json.dumps(response), status=201)
+
+
+@csrf_exempt
+def create_comment(request):
+    data = json.loads(request.body)
+    user = request.user
+    print(data)
+    try:
+        post = Post.objects.get(id=data['post_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('bad request', status=404)
+    new_comment = Comment.objects.create(author=user, post=post, content=data['content'])
+    response = {'comment_id': new_comment.id, 'content': new_comment.content, 'author': new_comment.author.email}
+    return HttpResponse(json.dumps(response), status=201)
 # def home(request):
 #     author = request.GET.get('author', None)
 #     posts = Post.objects.all()
