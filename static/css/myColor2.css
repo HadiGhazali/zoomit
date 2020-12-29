@@ -1,0 +1,14 @@
+
+.red-color{
+    background-color: red;
+}
+
+
+@media (min-width: 991px) {
+    .myAlgin {
+    -webkit-box-align: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important
+}
+}
+

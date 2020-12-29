@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Category, Comment, PostSetting, CommentLike
+from .models import Post, Category, Comment, PostSetting, CommentLike, UrlHit, HitCount
 from django.utils.translation import ngettext
 from django.contrib import messages
 
@@ -36,6 +36,7 @@ class PostAdmin(admin.ModelAdmin):
             '%d stories were successfully marked as published.',
             updated,
         ) % updated, messages.SUCCESS)
+
     make_published.short_description = "Mark selected stories as published"
 
 
@@ -59,3 +60,12 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(CommentLike)
 class CommentLikeAdmin(admin.ModelAdmin):
     list_display = ('author', 'get_post', 'condition')
+
+
+@admin.register(HitCount)
+class HitCountAdmin(admin.ModelAdmin):
+    list_display = ('url_hit', 'ip', 'session', 'update_date')
+    ordering = ['update_date']
+
+
+admin.site.register(UrlHit)

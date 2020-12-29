@@ -1,5 +1,7 @@
-<nav style="direction: rtl !important;" class="navbar navbar-expand-lg navbar-light red-color ">
-    <a class="navbar-brand" href="#">Navbar</a>
+{% load static %}
+<div class="d-none d-lg-block" style="height: 56px;"></div>
+<nav style="direction: rtl !important;" class="navbar navbar-expand-lg navbar-light bg-light" id="my-header">
+    <a class="navbar-brand " href="#"><i class="fab fa-xing"></i></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -7,7 +9,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="my-align-center navbar-nav ml-auto pr-2 mr-3 text-right myAlgin">
             <li class="nav-item active ">
-                <a class="nav-link " href="#">Home<span class="sr-only">(current)</span></a>
+                <a class="nav-link " href="{% url 'posts_archive' %}"><i class="fas fa-home"></i><span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -29,23 +31,32 @@
                     <a class="nav-link" href="{% url 'logout' %}">
                         {% if request.user.avatar %}
                             <div class="align-self-center">
-                                <img src="{{ request.user.avatar.url }}" style="height: 30px;width: 30px" class="rounded-circle" alt="...">
+                                <img src="{{ request.user.avatar.url }}" style="height: 30px;width: 30px"
+                                     class="rounded-circle" alt="...">
                             </div>
                         {% else %}
-                            <i class="fas fa-user-check"></i>
+                            <i class="fas fa-user-check"  style="color: #05dd00;"></i>
                         {% endif %}
                     </a>
                 {% else %}
                     <a class="nav-link" href="{% url 'login' %}">
-                        <i class="fas fa-user"></i>
+                        <i class="fas fa-user" style="color:red"></i>
                     </a>
                 {% endif %}
             </li>
 
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control ml-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+
+        <div id="search-field-2" style="display: none">
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control ml-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="mr-2">
+            <i id="search-icon-2" class="fas fa-search my-2 my-lg-0"></i>
+            <i style="display: none" id="close-search-field-2" class="far fa-times-circle"></i>
+        </div>
+
     </div>
 </nav>

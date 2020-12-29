@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'rest_framework',
+    'emoji_picker',
+    'ckeditor',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',

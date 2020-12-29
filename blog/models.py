@@ -1,6 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from datetime import datetime
+from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
@@ -22,10 +26,11 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(_("Title"), max_length=128)
     slug = models.SlugField(_("Slug"), db_index=True, unique=True)
-    content = models.TextField(_("Content"))
+    # content = models.TextField(_("Content"))
+    content = RichTextField(verbose_name=_('Content'), null=True, blank=True)
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
-    publish_time = models.DateTimeField(_("Publish at"), db_index=True)
+    publish_time = models.DateTimeField(_("Publish at"), db_index=True, default=timezone.now())
     draft = models.BooleanField(_("Draft"), default=True, db_index=True)
     image = models.ImageField(_("image"), upload_to='post/images', null=True)
     image2 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
@@ -59,7 +64,7 @@ class PostSetting(models.Model):
 
 
 class Comment(models.Model):
-    content = models.TextField(_("Content"))
+    content = models.TextField(verbose_name=_('Comment'), null=True, blank=True)
     post = models.ForeignKey(Post, verbose_name=_("Post"), on_delete=models.CASCADE, related_name='comments',
                              related_query_name='comments')
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
@@ -105,3 +110,45 @@ class CommentLike(models.Model):
     @property
     def get_post(self):
         return self.comment.post
+
+
+class UrlHit(models.Model):
+    post = models.OneToOneField(Post, verbose_name=_('post'), on_delete=models.CASCADE, related_name='url_hit',
+                                related_query_name='url_hit')
+    url = models.CharField(max_length=150, unique=True)
+    hits = models.PositiveIntegerField(default=0)
+    daily_hits = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return str(self.url)
+
+    def increase(self):
+        self.hits += 1
+        self.save()
+
+    def get_daily_hits(self):
+        return self.daily_hits
+
+    def set_daily_hits(self, daily_hits):
+        self.daily_hits = daily_hits
+        self.save()
+
+
+class HitCount(models.Model):
+    url_hit = models.ForeignKey(UrlHit, editable=True, on_delete=models.CASCADE)
+    ip = models.CharField(max_length=40)
+    session = models.CharField(max_length=40)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    create_date = models.DateTimeField(auto_now=True)
+    update_date = models.DateTimeField(null=True)
+
+    def updating_date(self):
+        self.update_date = timezone.now()
+        self.save()
+
+    def get_date(self):
+        return self.update_date.date()
+
+    def set_user(self, user):
+        self.user = user
+        self.save()

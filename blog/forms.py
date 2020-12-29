@@ -1,8 +1,10 @@
+from emoji_picker.widgets import EmojiPickerTextInputAdmin, EmojiPickerTextareaAdmin, EmojiPickerTextarea
+
 from django import forms
 from django.contrib.auth import get_user_model
 # from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from blog.models import Comment
+from blog.models import Comment, Post
 
 # from blog.validators import validate_password, validate_username, validate_user_and_name
 
@@ -44,6 +46,8 @@ User = get_user_model()
 
 
 class CommentForm(forms.ModelForm):
+    content = forms.CharField(widget=EmojiPickerTextarea)
+
     class Meta:
         model = Comment
         fields = ('content',)
@@ -55,3 +59,15 @@ class CommentForm(forms.ModelForm):
 
 class CommentLikeForm(forms.Form):
     condition = forms.BooleanField(label=_('Condition'))
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('content', 'title', 'slug', 'publish_time', 'draft', 'image', 'summary')
+        labels = {'content': _('Content'), }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'slug': forms.TextInput(attrs={'class': 'form-control'}),
+            'publish_time': forms.DateTimeInput(),
+        }

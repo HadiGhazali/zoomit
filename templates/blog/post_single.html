@@ -1,89 +1,397 @@
 {% extends 'base/base.html' %}
 {% load static %}
+
 {% block title %}
     zoomit || {{ post.title }}
 {% endblock %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/home-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/comment-box.css' %}">
+    <link rel="stylesheet" href="{% static 'css/my-container.css' %}">
 {% endblock %}
 {% block body %}
     {% include 'base/header.html' %}
-    <div class="container dir-rtl border">
-        <div class="row">
-            <div class="col-12">
-                <h1>{{ post.title }}</h1>
-            </div>
-
-            <div class="col-12">
-                <div class="card m-auto" style="width: 40rem;">
-                    <img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap">
+    <div class="row my-home-container mt-2 justify-content-center">
+        <div class="row col-12 m-md-3 m-1">
+            <div class="d-none d-md-flex col-md-3 flex-column dir-rtl">
+                <div class="card mb-2 mt-1 w-100 border-0">
+                    <a style="width: 90%" class="mx-auto" href="https://www.sarvcrm.com/career/" target="_blank"
+                       rel="nofollow">
+                        <img href="" class="card-img-top my-2 mx-auto" id="B4-Hamkaran"
+                             src="https://cdn01.zoomit.ir/2020/12/banner-sarv-250x250.gif" alt="...">
+                    </a>
                 </div>
-                {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
-            </div>
-            {% if post.image3 %}
-                <div class="col-12">
-                    <div class="card m-auto" style="width: 40rem;">
-                        <img class="card-img-top" src="{{ post.image3.url }}" alt="Card image cap">
-                    </div>
-                    {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
-                </div>
-            {% endif %}
-        </div>
-        <br>
-        {% if setting.author %}
-            <p>{{ post.author }}</p>
-        {% endif %}
-        <p>{{ post.content }}</p>
-        {% if post.image2 %}
-            <div class="col-12">
-                <div class="card m-auto" style="width: 40rem;">
-                    <img class="card-img-top" src="{{ post.image2.url }}" alt="Card image cap">
-                </div>
-                {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
-            </div>
-        {% endif %}
-        {% if post.post_setting.allow_discussion %}
-            <div id="AllPostComment">
-                {% for comment in post.comments.all %}
-                    <div>
 
-                        {{ comment.author.email }}
 
-                    </div>
-                    <div>
-                        {{ comment.content }}
-
-                    </div>
-                    <div>
-                        dislike:<span id="dislike_count_container{{ comment.id }}">{{ comment.dislike_count }}</span>
-                        <br>
-                        like:<span id="like_count_container{{ comment.id }}">{{ comment.like_count }}</span>
-                    </div>
-                    <div>
-                        <button type="submit" onclick="likeComment({{ comment.id }},true)"
-                                class="btn btn-primary">like
-                        </button>
-                        <button type="submit" onclick="likeComment({{ comment.id }}, false)"
-                                class="btn btn-primary">dislike
-                        </button>
+                {% for pop_post in pop_post %}
+                    <div class="card mb-2 mt-1 w-100">
+                        <img class="card-img-top my-2 mx-auto" style="width: 90%;" src="{{ pop_post.image.url }}"
+                             alt="Card image cap">
+                        <div class="card-body">
+                            <h3><a href="{% url 'post_single_2' pop_post.slug %}">{{ pop_post.title }}</a></h3>
+                            <p class="card-text">{{ pop_post.summary }}</p>
+                        </div>
                     </div>
                 {% endfor %}
-
-            </div>
-            {% if post.post_setting.comment %}
-                <label for="commentText"></label>
-                <textarea name="content" id="commentText"></textarea>
-                <button onclick="creatComment({{ post.id }})">Send Comment</button>
-            {% endif %}
-        {% endif %}
-        <hr>
-        <div class="row">
-            <div class="col-12">مطالب مرتبط:</div>
-            {% for related_post in related_posts %}
-                <div class="col-12">
-                    <a href="{% url 'post_single' related_post.slug %}">{{ related_post.title }}</a>
+                <div class="card mb-2 mt-1 w-100 border-0">
+                    <a style="width: 90%" class="mx-auto" href="https://www.sarvcrm.com/career/" target="_blank"
+                       rel="nofollow">
+                        <img href="" class="card-img-top my-2 mx-auto" id="B4-Hamkaran"
+                             src="https://cdn01.zoomit.ir/2020/10/ezgif.com-optimize.gif" alt="...">
+                    </a>
                 </div>
-            {% endfor %}
+            </div>
+
+            <div class="dir-rtl col-12 col-md-9 col-lg-6 border">
+                <div class="row">
+                    <div class="col-12">
+                        <h1>{{ post.title }}</h1>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card m-auto rounded" style="width: 80%">
+                            <img class="card-img-top" src="{{ post.image.url }}" width="90%" alt="Card image cap">
+                        </div>
+                        {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
+                    </div>
+                    {% if post.image3 %}
+                        <div class="col-12">
+                            <div class="card m-auto" style="width: 40rem;">
+                                <img class="card-img-top" src="{{ post.image3.url }}" alt="Card image cap">
+                            </div>
+                            {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
+                        </div>
+                    {% endif %}
+                </div>
+                <br>
+                {% if setting.author %}
+                    <p>{{ post.author }}</p>
+                {% endif %}
+                <p>{{ post.content|safe }}</p>
+                {% if post.image2 %}
+                    <div class="col-12">
+                        <div class="card m-auto" style="width: 40rem;">
+                            <img class="card-img-top" src="{{ post.image2.url }}" alt="Card image cap">
+                        </div>
+                        {#                <img alt="post image" width="100%" src="{{ post.image.url }}">#}
+                    </div>
+                {% endif %}
+                <hr>
+                {% if post.post_setting.allow_discussion %}
+                    <button id="showComment" class="btn btn-primary btn-sm btn-block width-70 m-auto rounded "
+                            role="button">
+                        show comment
+                    </button>
+                {% else %}
+                    <div class="width-70 text-center p-1 rounded border my-2 mx-auto" style="cursor: not-allowed">show
+                        comments not allowed
+                    </div>
+                {% endif %}
+                <div id="CommentObjContainer" class="row justify-content-center w-100 m-0 p-0" style="display: none">
+                    <div class="panel panel-default widget width-70 m-auto" style="border: solid black 2px !important;">
+                        <div class="dir-rtl panel-heading row " style="direction: ltr">
+                            <div class="col-2">span</div>
+                            <h3 class="col-10">
+                                Recent Comments</h3>
+                        </div>
+                        <div class="panel-body w-100 m-auto">
+                            <nav dir="ltr" class="navbar navbar-expand-lg navbar-light">
+                                <a class="navbar-brand"><i id="refreshComments" class="fas fa-sync-alt"
+                                                           style="cursor: pointer"></i></a>
+                                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                        data-target="#navbarNav"
+                                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div dir="rtl" class="collapse navbar-collapse mr-0" id="navbarNav">
+                                    <ul class="navbar-nav" dir="rtl" style="padding-inline-start: 0">
+                                        <li class="nav-item" id="lastCommentButton">
+                                            <a class="nav-link" style="cursor: pointer">Last comment</a>
+                                        </li>
+                                        <li class="nav-item" id="olderCommentButton">
+                                            <a class="nav-link" style="cursor: pointer">Older comment</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                            <ul class="list-group w-100 m-auto" id="AllPostComment" style="direction: ltr !important;">
+                                {% for comment in last_comment %}
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="d-none d-lg-flex col-md-3">
+                                                {% if comment.author.avatar %}
+                                                    <img src="{{ comment.author.avatar.url }}"
+                                                         class="img-circle img-responsive rounded-circle w-100" alt=""/>
+                                                {% else %}
+                                                    <img src="http://placehold.it/80"
+                                                         class="img-circle img-responsive rounded-circle w-100" alt=""/>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-12 col-lg-9">
+                                                <div>
+                                                    <a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">
+                                                        {{ post.title }}</a>
+                                                    <div class="mic-info">
+                                                        By: <a href="#">{{ comment.author }}</a> {{ comment.create_at }}
+                                                    </div>
+                                                </div>
+                                                <div class="comment-text">
+                                                    <p>{{ comment.content }}</p>
+                                                </div>
+                                                <div>
+                                                    dislike:<span
+                                                        id="dislike_count_container{{ comment.id }}">{{ comment.dislike_count }}</span>
+                                                    <br>
+                                                    like:<span
+                                                        id="like_count_container{{ comment.id }}">{{ comment.like_count }}</span>
+                                                </div>
+                                                <div class="action">
+                                                    <button type="submit"
+                                                            onclick="likeComment({{ comment.id }}, true)"
+                                                            class="btn btn-success btn-xs">
+                                                        <span class="glyphicon glyphicon-ok">like</span>
+                                                    </button>
+                                                    <button type="submit"
+                                                            onclick="likeComment({{ comment.id }}, false)"
+                                                            class="btn btn-success btn-xs">
+                                                        <span class="glyphicon glyphicon-ok">dislike</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+                                <button id="closeComment"
+                                        class="btn btn-primary btn-sm btn-block width-70 mx-auto rounded-0 my-2"
+                                        role="button">
+                                    close comment
+                                </button>
+                            </ul>
+                            <ul class="list-group w-100 m-auto" id="OldCommentContainer"
+                                style="direction: ltr !important; display: none">
+                                {% if older_comment.0 %}
+                                    {% for comment in older_comment %}
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="d-none d-lg-flex col-md-3">
+                                                    {% if comment.author.avatar %}
+                                                        <img src="{{ comment.author.avatar.url }}"
+                                                             class="img-circle img-responsive rounded-circle w-100"
+                                                             alt=""/>
+                                                    {% else %}
+                                                        <img src="http://placehold.it/80"
+                                                             class="img-circle img-responsive rounded-circle w-100"
+                                                             alt=""/>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-12 col-lg-9">
+                                                    <div>
+                                                        <a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">
+                                                            {{ post.title }}</a>
+                                                        <div class="mic-info">
+                                                            By: <a
+                                                                href="#">{{ comment.author }}</a> {{ comment.create_at }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment-text">
+                                                        <p>{{ comment.content }}</p>
+                                                    </div>
+                                                    <div>
+                                                        dislike:<span
+                                                            id="dislike_count_container{{ comment.id }}">{{ comment.dislike_count }}</span>
+                                                        <br>
+                                                        like:<span
+                                                            id="like_count_container{{ comment.id }}">{{ comment.like_count }}</span>
+                                                    </div>
+                                                    <div class="action">
+                                                        <button type="submit"
+                                                                onclick="likeComment({{ comment.id }}, true)"
+                                                                class="btn btn-success btn-xs">
+                                                            <span class="glyphicon glyphicon-ok">like</span>
+                                                        </button>
+                                                        <button type="submit"
+                                                                onclick="likeComment({{ comment.id }}, false)"
+                                                                class="btn btn-success btn-xs">
+                                                            <span class="glyphicon glyphicon-ok">dislike</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="list-group-item">
+                                        <div class="col-12">
+                                            <div class="comment-text m-auto">
+                                                <p class="text-center" style="font-size: 30px">no post exist</p>
+                                            </div>
+                                    </li>
+                                {% endif %}
+
+                                <button id="closeComment1"
+                                        class="btn btn-primary btn-sm btn-block width-70 mx-auto rounded-0 my-2"
+                                        role="button">
+                                    close comment
+                                </button>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                {% if post.post_setting.comment %}
+                    <div id="formContainer" class="justify-content-center mt-3" style="display: none">
+
+                        <form id="commentForm" action="">
+                            <hr>
+
+                            {% csrf_token %}
+                            {{ form.media }}
+                            <div class="m-auto">
+                                {% for field in form %}
+                                    {{ field }}
+                                {% endfor %}
+                            </div>
+                            <button type="submit" onclick="creatComment({{ post.id }})">Send Comment</button>
+                        </form>
+                    </div>
+                    <button id="addComment" class="btn btn-primary btn-sm btn-block width-70 m-auto rounded"
+                            style="margin-top: .5rem !important;" role="button"><span
+                            class="glyphicon glyphicon-refresh"></span> add Comment
+                    </button>
+                {% else %}
+                    <div class="width-70 text-center p-1 rounded border my-2 mx-auto" style="cursor: not-allowed">add
+                        comment not allowed
+                    </div>
+                {% endif %}
+
+
+                <hr>
+                <div class="row">
+                    <div class="col-12">مطالب مرتبط:</div>
+                    <div class="row justify-content-center justify-content-md-start m-0 p-0">
+                        {% for related_post in related_posts %}
+                            <div class="col-10 col-md-6 col-xl-4 m-0 p-0">
+                                <div class="card mx-2 mt-1 w-100">
+                                    <img class="card-img-top my-2 mx-auto" style="width: 90%;"
+                                         src="{{ related_post.image.url }}"
+                                         alt="Card image cap">
+                                    <div class="card-body">
+                                        <h3>
+                                            <a href="{% url 'post_single_2' related_post.slug %}">{{ related_post.title }}</a>
+                                        </h3>
+                                        <p class="card-text">{{ related_post.summary }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">در اینترنت:</div>
+                    <div class="row justify-content-center justify-content-md-start m-0 p-0">
+                        <div class="col-10 col-md-6 col-xl-4 m-0 p-0">
+                            <div class="card mx-2 mt-1" style="width: 90%">
+                                <img class="card-img-top my-2 mx-auto" style="width: 90%;"
+                                     src="https://picsum.photos/400/300?random=5"
+
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h3>
+                                        <a href="#">مطلب ۱</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-10 col-md-6 col-xl-4 m-0 p-0">
+                            <div class="card mx-2 mt-1" style="width: 90%">
+                                <img class="card-img-top my-2 mx-auto" style="width: 90%;"
+                                     src="https://picsum.photos/400/300?random=7"
+
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h3>
+                                        <a href="#">مطلب ۲</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-10 col-md-6 col-xl-4 m-0 p-0">
+                            <div class="card mx-2 mt-1" style="width: 90%">
+                                <img class="card-img-top my-2 mx-auto" style="width: 90%;"
+                                     src="https://picsum.photos/400/300?random=9"
+
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h3>
+                                        <a href="#">مطلب ۳</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-10 col-md-6 col-xl-4 m-0 p-0">
+                            <div class="card mx-2 mt-1" style="width: 90%">
+                                <img class="card-img-top my-2 mx-auto" style="width: 90%;"
+                                     src="https://picsum.photos/400/300?random=10"
+
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h3>
+                                        <a href="#">مطلب ۴</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-10 col-md-6 col-xl-4 m-0 p-0">
+                            <div class="card mx-2 mt-1" style="width: 90%">
+                                <img class="card-img-top my-2 mx-auto" style="width: 90%;"
+                                     src="https://picsum.photos/400/300?random=13"
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h3>
+                                        <a href="#">مطلب ۵</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-10 col-md-6 col-xl-4 m-0 p-0">
+                            <div class="card mx-2 mt-1" style="width: 90%">
+                                <img class="card-img-top my-2 mx-auto" style="width: 90%;height: 100%"
+                                     src="https://picsum.photos/seed/picsum/400/300"
+                                     alt="Card image cap">
+                                <div class="card-body">
+                                    <h3>
+                                        <a href="#">مطلب ۶</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="d-none d-md-flex col-md-3 flex-column dir-rtl">
+                <div class="card mb-2 mt-1 w-100 border-0">
+                    <a style="width: 90%" class="mx-auto" href="https://www.sarvcrm.com/career/" target="_blank"
+                       rel="nofollow">
+                        <img href="" class="card-img-top my-2 mx-auto" id="B4-Hamkaran" style="width: 90%;height: 100%"
+                             src="https://cdn01.zoomit.ir/2020/11/banner-xvision-campain-rang-500x250px-s-990904.gif"
+                             alt="...">
+                    </a>
+                </div>
+
+                {% for last_post in last_posts %}
+                    <div class="card mb-2 mt-1 w-100">
+                        <img class="card-img-top my-2 mx-auto" style="width: 90%;" src="{{ last_post.image.url }}"
+                             alt="Card image cap">
+                        <div class="card-body">
+                            <h3><a href="{% url 'post_single_2' last_post.slug %}">{{ last_post.title }}</a></h3>
+                            <p class="card-text">{{ last_post.summary }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
     <div class="mt-2">{% include  'base/footer.html' %}</div>
@@ -108,41 +416,168 @@
             })
         }
 
+        const element = document.getElementById('commentForm');
+        element.addEventListener('submit', event => {
+            event.preventDefault();
+            // actual logic, e.g. validate the form
+        });
+
+        function get_and_post_data(data) {
+            console.log(data)
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    type: 'POST',
+                    url: {% url 'create_comment' %},
+                    data: data,
+                    success: function (response) {
+                        console.log(response)
+                        resolve(response)
+                    },
+                    fail: function () {
+                        reject(console.log('error'))
+                    }
+                })
+            })
+        }
+
         function creatComment(postId) {
-            let content = $('#commentText').val()
+            let content = $('#id_content').val()
             const data = JSON.stringify({
                 post_id: postId,
                 content: content,
             })
-            $.ajax({
-                type: 'POST',
-                url: {% url 'create_comment'  %},
-                data: data,
-                success: function (response) {
-                    let res = JSON.parse(response)
-                    $('#AllPostComment').prepend(
-                        `<div>
-                            ${res.author}
-                         </div>
-                            <div>
-                            ${res.content}
-                    </div>
-                    <div>
-                        dislike:<span id="dislike_count_container${res.comment_id}">0</span>
-                        <br>
-                        like:<span id="like_count_container${res.comment_id}">0</span>
-                    </div>
-                    <div>
-                        <button type="submit" onclick="likeComment(${res.comment_id},true)"
-                                class="btn btn-primary">like
-                        </button>
-                        <button type="submit" onclick="likeComment(${res.comment_id}, false)"
-                                class="btn btn-primary">dislike
-                        </button>
-                    </div>`
-                    )
-                }
+            get_and_post_data(data).then((obj) => {
+                obj = JSON.parse(obj)
+                addToPostComment(obj)
+            }).catch(() => {
+                console.log('error')
             })
+
         }
+
+        $('#addComment').click(function () {
+            let form = $('#formContainer')
+            if (form.css('display') === 'none') {
+                form.css('display', 'flex')
+            } else {
+                form.css('display', 'none')
+            }
+        })
+
+        $('#showComment').click(function () {
+            let form = $('#CommentObjContainer')
+            if (form.css('display') === 'none') {
+                form.css('display', 'flex')
+                $(this).css('display', 'none')
+                $('#lastCommentButton').addClass('active')
+                let old_comment = $('#AllPostComment')
+                old_comment.css('display', 'flex')
+                $('#olderCommentButton').removeClass('active')
+            }
+
+
+        })
+
+        $('#refreshComments').click(function () {
+            let form = $('#CommentObjContainer')
+            form.css('display', 'flex')
+            $('#lastCommentButton').addClass('active')
+            let last_comment = $('#AllPostComment')
+            last_comment.css('display', 'flex')
+            $('#olderCommentButton').removeClass('active')
+            let old_comment = $('#OldCommentContainer')
+            old_comment.css('display', 'none')
+
+
+        })
+
+        $('#closeComment').click(function () {
+            let button = $('#showComment')
+            let form = $('#CommentObjContainer')
+            if (form.css('display') === 'flex') {
+                form.css('display', 'none')
+                button.css('display', 'block')
+
+            }
+        })
+
+        function addToPostComment(res) {
+
+            var today = new Date();
+            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            $('#AllPostComment').prepend(
+                `<li class="list-group-item">
+  <div class="row">
+      <div class="d-none d-lg-flex col-md-3">
+              <img src="http://placehold.it/80"
+                   class="img-circle img-responsive rounded-circle w-100" alt=""/>
+      </div>
+      <div class="col-12 col-lg-9">
+          <div>
+              <a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">
+                </a>
+              <div class="mic-info">
+                  By: <a href="#">${res.author}</a> ${date}
+              </div>
+          </div>
+          <div class="comment-text">
+              <p>${res.content}</p>
+          </div>
+          <div>
+              dislike:<span
+                  id="dislike_count_container${res.comment_id}">0</span>
+              <br>
+              like:<span
+                  id="like_count_container${res.comment_id}">0</span>
+          </div>
+          <div class="action">
+              <button type="submit"
+                      onclick="likeComment(${res.comment_id}, true)"
+                      class="btn btn-success btn-xs">
+                  <span class="glyphicon glyphicon-ok">like</span>
+              </button>
+              <button type="submit"
+                      onclick="likeComment(${res.comment_id}, false)"
+                      class="btn btn-success btn-xs">
+                  <span class="glyphicon glyphicon-ok">dislike</span>
+              </button>
+          </div>
+      </div>
+  </div>
+</li>`
+            )
+        }
+
+        $('#lastCommentButton').click(function () {
+            let last_comment = $('#AllPostComment')
+            let old_comment = $('#OldCommentContainer')
+            last_comment.css('display', 'flex')
+            old_comment.css('display', 'none')
+            $(this).addClass('active')
+            $('#olderCommentButton').removeClass('active')
+
+        })
+        $('#olderCommentButton').click(function () {
+            let last_comment = $('#AllPostComment')
+            let old_comment = $('#OldCommentContainer')
+            last_comment.css('display', 'none')
+            old_comment.css('display', 'flex')
+            $(this).addClass('active')
+            $('#lastCommentButton').removeClass('active')
+
+        })
+
+        $('#closeComment1').click(function () {
+            let button = $('#showComment')
+            let form = $('#CommentObjContainer')
+            if (form.css('display') === 'flex') {
+                form.css('display', 'none')
+                button.css('display', 'block')
+
+            }
+        })
+
     </script>
+
 {% endblock %}
+

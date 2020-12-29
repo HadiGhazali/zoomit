@@ -1,0 +1,23 @@
+@media (min-width: 992px) {
+    #my-header {
+        /* Black background color */
+        position: fixed;
+        top: 0;
+        width: 100%; /* Full width */
+        transition: top 0.9s; /* Transition effect when sliding down (and up) */
+        z-index: 10000;
+    }
+}
+
+div.my-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+/*@media (max-width: 767px) {*/
+/*    #my-header {*/
+/*        top: 0;*/
+/*        display: none;*/
+/*    }*/
+/*}*/
