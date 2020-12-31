@@ -6,6 +6,12 @@ from django.conf import settings
 from datetime import datetime
 from ckeditor.fields import RichTextField
 
+MAIN_CATEGORY = (
+    ('Tech', 'تکنولوژی'),
+    ('Car', 'خودرو'),
+    ('Science', 'علمی'),
+)
+
 
 class Category(models.Model):
     title = models.CharField(_('Title'), max_length=50)
@@ -14,6 +20,7 @@ class Category(models.Model):
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     parent = models.ForeignKey('self', verbose_name=_("Parent"), on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='children', related_query_name='children')
+    main_category = models.CharField(_('Main category'), max_length=10, choices=MAIN_CATEGORY, blank=True)
 
     class Meta:
         verbose_name = _("Category")

@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, InvalidPage
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from random import sample
 from django.shortcuts import render, redirect
@@ -16,6 +16,8 @@ from django.db import models
 from django.views.generic.edit import ModelFormMixin, FormMixin, BaseFormView
 import json
 from datetime import datetime, timedelta
+
+from django.views.generic.list import MultipleObjectMixin
 
 from .models import Post, Category, Comment, CommentLike, UrlHit, HitCount
 from .forms import CommentForm, PostForm
@@ -71,9 +73,19 @@ class PostSingle(DetailView):
         return context
 
 
-class CategorySingle(DetailView):
+class CategorySingle(DetailView, MultipleObjectMixin):
     model = Category
     template_name = 'blog/category_single.html'
+    paginate_by = 1
+
+    def get_context_data(self, **kwargs):
+        object_list = Post.objects.filter(category=self.object)
+        context = super(CategorySingle, self).get_context_data(object_list=object_list, **kwargs)
+        pop_post = Post.objects.order_by('url_hit__hits')[::-1][:5]
+        context['pop_post'] = pop_post
+        pop_daily_post = Post.objects.order_by('url_hit__daily_hits')[::-1][:5]
+        context['pop_daily_post'] = pop_daily_post
+        return context
 
 
 class CategoryArchive(ListView):
@@ -108,6 +120,17 @@ def create_comment(request):
     user = request.user
     new_comment = Comment.objects.create(author=user, post_id=data['post_id'], content=data['content'])
     response = {'comment_id': new_comment.id, 'content': new_comment.content, 'author': new_comment.author.email}
+    return HttpResponse(json.dumps(response), status=201)
+
+
+@csrf_exempt
+def get_category_ajax(request):
+    categories = Category.objects.all()
+    categories_list = []
+    for category in categories:
+        categories_list.append(
+            {'title': category.title, 'slug': category.slug, 'main_category': category.main_category})
+    response = categories_list
     return HttpResponse(json.dumps(response), status=201)
 
 

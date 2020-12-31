@@ -139,11 +139,10 @@
                         </div>
                     </div>
                 {% endfor %}
-
             </div>
-            <div class="container dir-rtl col-12 col-md-9 col-lg-6">
+            <div class="container dir-rtl col-12 col-md-9 col-lg-6 border">
                 {% for post in post_list %}
-                    <div class="row border m-1">
+                    <div class="row m-1">
                         <div class="col-4">
                             <div class="p-2 m-2">
                                 <img alt="post image" width="100%" src="{{ post.image.url }}">
@@ -160,6 +159,7 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
                 {% endfor %}
             </div>
             <div class="d-none d-lg-flex col-lg-3">

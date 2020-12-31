@@ -7,45 +7,59 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="my-align-center navbar-nav ml-auto pr-2 mr-3 text-right myAlgin">
-            <li class="nav-item active ">
-                <a class="nav-link " href="{% url 'posts_archive' %}"><i class="fas fa-home"></i><span class="sr-only">(current)</span></a>
-            </li>
+        <ul class="my-align-center navbar-nav ml-auto pr-2 mr-3 text-right myAlgin" id="header_ul">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    Dropdown
+                    علمی
                 </a>
-                <div class="dropdown-menu text-right margin-rl-6 margin-1" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                <div class="dropdown-menu text-right margin-rl-6 margin-1" aria-labelledby="navbarDropdown"
+                     id="science">
+
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    خودرو
+                </a>
+                <div class="dropdown-menu text-right margin-rl-6 margin-1" aria-labelledby="navbarDropdown" id="car">
+
+                </div>
             </li>
-            <li class="nav-item">
-                {% if request.user.is_authenticated %}
-                    <a class="nav-link" href="{% url 'logout' %}">
-                        {% if request.user.avatar %}
-                            <div class="align-self-center">
-                                <img src="{{ request.user.avatar.url }}" style="height: 30px;width: 30px"
-                                     class="rounded-circle" alt="...">
-                            </div>
-                        {% else %}
-                            <i class="fas fa-user-check"  style="color: #05dd00;"></i>
-                        {% endif %}
-                    </a>
-                {% else %}
-                    <a class="nav-link" href="{% url 'login' %}">
-                        <i class="fas fa-user" style="color:red"></i>
-                    </a>
-                {% endif %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    تکنولوژی
+                </a>
+                <div class="dropdown-menu text-right margin-rl-6 margin-1" aria-labelledby="navbarDropdown" id="tech">
+
+                </div>
             </li>
 
+
         </ul>
+        <div class="nav-item ">
+            <a class="nav-link " href="{% url 'posts_archive' %}"><i class="fas fa-home"></i></a>
+        </div>
+        <div class="nav-item">
+            {% if request.user.is_authenticated %}
+                <a class="nav-link" href="{% url 'logout' %}">
+                    {% if request.user.avatar %}
+                        <div class="align-self-center">
+                            <img src="{{ request.user.avatar.url }}" style="height: 30px;width: 30px"
+                                 class="rounded-circle" alt="...">
+                        </div>
+                    {% else %}
+                        <i class="fas fa-user-check" style="color: #05dd00;"></i>
+                    {% endif %}
+                </a>
+            {% else %}
+                <a class="nav-link" href="{% url 'login' %}">
+                    <i class="fas fa-user" style="color:red"></i>
+                </a>
+            {% endif %}
+        </div>
 
         <div id="search-field-2" style="display: none">
             <form class="form-inline my-2 my-lg-0">
@@ -53,10 +67,50 @@
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
-        <div class="mr-2">
+        <div class="mr-2 nav-item">
             <i id="search-icon-2" class="fas fa-search my-2 my-lg-0"></i>
             <i style="display: none" id="close-search-field-2" class="far fa-times-circle"></i>
         </div>
 
     </div>
 </nav>
+<script>
+    function loadDoc() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 201) {
+                let data = JSON.parse(this.response)
+                data.map((item) => {
+                    if (item.main_category === 'Car') {
+                        document.getElementById('car').innerHTML += `
+                <a class="dropdown-item" href='http://127.0.0.1:8000/categories/${item.slug}'>${item.title}</a>
+            `
+                    }
+                    if (item.main_category === 'Tech') {
+                        document.getElementById('tech').innerHTML += `
+                <a class="dropdown-item" href='http://127.0.0.1:8000/categories/${item.slug}'>${item.title}</a>
+            `
+                    }
+                    if (item.main_category === 'Science') {
+                        document.getElementById('science').innerHTML += `
+                <a class="dropdown-item" href='http://127.0.0.1:8000/categories/${item.slug}'>${item.title}</a>
+            `
+                    }
+
+
+                })
+
+            }
+
+
+        };
+        xhttp.open("GET", {% url 'get_category' %}, true);
+        xhttp.send();
+    }
+
+    function reqListener() {
+        console.log(this.responseText);
+    }
+
+    loadDoc()
+</script>

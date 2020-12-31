@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <div class="dir-rtl col-12 col-md-9 col-lg-6 border">
+            <div class="dir-rtl col-12 col-md-9 col-lg-6 border" id="main-side">
                 <div class="row">
                     <div class="col-12">
                         <h1>{{ post.title }}</h1>
@@ -138,27 +138,29 @@
                                                 <div class="comment-text">
                                                     <p>{{ comment.content }}</p>
                                                 </div>
-                                                <div>
-                                                    dislike:<span
-                                                        id="dislike_count_container{{ comment.id }}">{{ comment.dislike_count }}</span>
-                                                    <br>
-                                                    like:<span
-                                                        id="like_count_container{{ comment.id }}">{{ comment.like_count }}</span>
+                                                <div class="action row">
+                                                    <div class="flex flex-column col-3 ">
+                                                        <i type="submit"
+                                                           onclick="likeComment({{ comment.id }}, true)"
+                                                           class="far fa-thumbs-up like_icon icon-color">
+                                                        </i>
+                                                        <div><span class=" like_icon icon-color"
+                                                                   id="like_count_container{{ comment.id }}">{{ comment.like_count }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex flex-column col-3">
+                                                        <i type="submit"
+                                                           onclick="likeComment({{ comment.id }}, false)"
+                                                           class="far fa-thumbs-down dislike_icon icon-color">
+                                                        </i>
+                                                        <div><span
+                                                                id="dislike_count_container{{ comment.id }}"
+                                                                class="dislike_icon icon-color">{{ comment.dislike_count }}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="action">
-                                                    <button type="submit"
-                                                            onclick="likeComment({{ comment.id }}, true)"
-                                                            class="btn btn-success btn-xs">
-                                                        <span class="glyphicon glyphicon-ok">like</span>
-                                                    </button>
-                                                    <button type="submit"
-                                                            onclick="likeComment({{ comment.id }}, false)"
-                                                            class="btn btn-success btn-xs">
-                                                        <span class="glyphicon glyphicon-ok">dislike</span>
-                                                    </button>
-                                                </div>
+
                                             </div>
-                                        </div>
                                     </li>
                                 {% endfor %}
 
@@ -197,24 +199,26 @@
                                                     <div class="comment-text">
                                                         <p>{{ comment.content }}</p>
                                                     </div>
-                                                    <div>
-                                                        dislike:<span
-                                                            id="dislike_count_container{{ comment.id }}">{{ comment.dislike_count }}</span>
-                                                        <br>
-                                                        like:<span
-                                                            id="like_count_container{{ comment.id }}">{{ comment.like_count }}</span>
-                                                    </div>
-                                                    <div class="action">
-                                                        <button type="submit"
-                                                                onclick="likeComment({{ comment.id }}, true)"
-                                                                class="btn btn-success btn-xs">
-                                                            <span class="glyphicon glyphicon-ok">like</span>
-                                                        </button>
-                                                        <button type="submit"
-                                                                onclick="likeComment({{ comment.id }}, false)"
-                                                                class="btn btn-success btn-xs">
-                                                            <span class="glyphicon glyphicon-ok">dislike</span>
-                                                        </button>
+                                                    <div class="action row">
+                                                        <div class="flex flex-column col-3 ">
+                                                            <i type="submit"
+                                                               onclick="likeComment({{ comment.id }}, true)"
+                                                               class="far fa-thumbs-up like_icon icon-color">
+                                                            </i>
+                                                            <div><span class=" like_icon icon-color"
+                                                                       id="like_count_container{{ comment.id }}">{{ comment.like_count }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex flex-column col-3">
+                                                            <i type="submit"
+                                                               onclick="likeComment({{ comment.id }}, false)"
+                                                               class="far fa-thumbs-down dislike_icon icon-color">
+                                                            </i>
+                                                            <div><span
+                                                                    id="dislike_count_container{{ comment.id }}"
+                                                                    class="dislike_icon icon-color">{{ comment.dislike_count }}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -523,25 +527,28 @@
           <div class="comment-text">
               <p>${res.content}</p>
           </div>
-          <div>
-              dislike:<span
-                  id="dislike_count_container${res.comment_id}">0</span>
-              <br>
-              like:<span
-                  id="like_count_container${res.comment_id}">0</span>
-          </div>
-          <div class="action">
-              <button type="submit"
-                      onclick="likeComment(${res.comment_id}, true)"
-                      class="btn btn-success btn-xs">
-                  <span class="glyphicon glyphicon-ok">like</span>
-              </button>
-              <button type="submit"
-                      onclick="likeComment(${res.comment_id}, false)"
-                      class="btn btn-success btn-xs">
-                  <span class="glyphicon glyphicon-ok">dislike</span>
-              </button>
-          </div>
+
+          <div class="action row">
+    <div class="flex flex-column col-3 ">
+        <i type="submit"
+           onclick="likeComment(${res.comment_id}, true)"
+           class="far fa-thumbs-up like_icon icon-color">
+        </i>
+        <div><span class=" like_icon icon-color"
+                   id="like_count_container${res.comment_id}">0</span>
+        </div>
+    </div>
+    <div class="flex flex-column col-3">
+        <i type="submit"
+           onclick="likeComment(${res.comment_id}, false)"
+           class="far fa-thumbs-down dislike_icon icon-color">
+        </i>
+        <div><span
+                id="dislike_count_container${res.comment_id}"
+                class="dislike_icon icon-color">0</span>
+        </div>
+    </div>
+</div>
       </div>
   </div>
 </li>`

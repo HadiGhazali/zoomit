@@ -247,6 +247,18 @@
     }
 }
 
+.like_icon:hover{
+    color: #57d61a;
+}
+
+.dislike_icon:hover{
+    color: #d6002e;
+
+}
+
+.icon-color {
+    color: #a8a79d;
+}
 
 
 
