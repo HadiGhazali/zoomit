@@ -94,7 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
 
-    object = UserManager()
+    objects = UserManager()
 
     @classmethod
     def normalize_email(cls, email):

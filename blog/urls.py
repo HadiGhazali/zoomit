@@ -1,6 +1,7 @@
 from django.urls import path, re_path
 from .views import PostArchive, PostSingle, CategorySingle, CategoryArchive, like_comment, create_comment, \
     AddPostView, get_category_ajax
+from .api import post_list, post_detail, comment_detail, comment_list
 
 urlpatterns = [
     # path('', home, name='posts_archive'),
@@ -13,4 +14,8 @@ urlpatterns = [
     path('like_comment/', like_comment, name='like_comment'),
     path('create_comment/', create_comment, name='create_comment'),
     path('get_category_ajax/', get_category_ajax, name='get_category'),
+    path('json/posts/', post_list, name='post_list'),
+    path('json/posts/<int:pk>', post_detail, name='post_detail'),
+    path('json/comments/', comment_list, name='comment_list'),
+    path('json/comments/<int:pk>', comment_detail, name='comment_detail')
 ]

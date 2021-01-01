@@ -39,7 +39,7 @@ class Post(models.Model):
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     publish_time = models.DateTimeField(_("Publish at"), db_index=True, default=timezone.now())
     draft = models.BooleanField(_("Draft"), default=True, db_index=True)
-    image = models.ImageField(_("image"), upload_to='post/images', null=True)
+    image = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
     image2 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
     image3 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"), related_name='posts',
