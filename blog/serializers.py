@@ -26,6 +26,7 @@ class PostSerializer(serializers.Serializer):
     draft = serializers.BooleanField()
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    author_detail = UserSerializer(read_only=True, source='author')
     image = serializers.ImageField(allow_null=True)
     image2 = serializers.ImageField(allow_null=True)
     image3 = serializers.ImageField(allow_null=True)
