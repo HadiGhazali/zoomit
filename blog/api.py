@@ -1,9 +1,11 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse, Http404
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, action
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
+from .permissions import IsPostAuthorOrReadOnly
 from blog.models import Post, Comment, Category
 from blog.serializers import PostSerializer, CommentSerializer, CategorySerializer
 from rest_framework.parsers import JSONParser
@@ -14,6 +16,9 @@ from rest_framework.views import APIView
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsPostAuthorOrReadOnly]
 
     @action(detail=True, methods=['get'])
     def comment(self, request, pk=None):

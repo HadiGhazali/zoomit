@@ -129,7 +129,8 @@ def get_category_ajax(request):
     categories_list = []
     for category in categories:
         categories_list.append(
-            {'title': category.title, 'slug': category.slug, 'main_category': category.main_category})
+            {'title': category.title, 'slug': category.slug, 'main_category': category.main_category}
+        )
     response = categories_list
     return HttpResponse(json.dumps(response), status=201)
 

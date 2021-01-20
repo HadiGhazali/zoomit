@@ -43,7 +43,7 @@ class Post(models.Model):
     image2 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
     image3 = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"), related_name='posts',
-                               related_query_name='children', on_delete=models.CASCADE)
+                               related_query_name='children', on_delete=models.PROTECT)
     category = models.ForeignKey(Category, verbose_name=_('Category'), on_delete=models.SET_NULL,
                                  related_name='posts',
                                  null=True, blank=True)
